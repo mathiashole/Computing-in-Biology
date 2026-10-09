@@ -3424,7 +3424,36 @@ Explicación del conteo
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Ejemplo de ejecucion por archivo:</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> GCF_000005845.2.fna <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/C/\n&amp;/g&#39;</span> <span class="kw">|</span> <span class="fu">egrep</span> <span class="at">-c</span> ^<span class="pp">[</span><span class="ss">C</span><span class="pp">]</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Tabla de resultados para Citosinas:</p>
-<p>Ensamblado C ● GCF_000005845.2 [Completar con la salida obtenida] ● GCF_000007625.1 [Completar con la salida obtenida] ● GCF_000009045.1 [Completar con la salida obtenida] ● GCF_000498355.1 [Completar con la salida obtenida] ● GCF_001484935.1 [Completar con la salida obtenida]</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ensamblado</th>
+<th style="text-align: left;">N° de Citosinas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>GCF_000005845.2</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>GCF_000007625.1</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>GCF_000009045.1</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>GCF_000498355.1</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>GCF_001484935.1</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="b-porcentaje-de-gc-gc-en-el-transcriptoma" class="level5" data-number="1.2.2.3.2">
 <h5 data-number="1.2.2.3.2" class="anchored" data-anchor-id="b-porcentaje-de-gc-gc-en-el-transcriptoma"><span class="header-section-number">1.2.2.3.2</span> b) Porcentaje de GC (%GC) en el transcriptoma</h5>
@@ -3463,14 +3492,26 @@ Explicación del conteo
 <h4 data-number="1.2.3.2" class="anchored" data-anchor-id="pipeline-de-estandarización-secuencia-en-una-sola-línea"><span class="header-section-number">1.2.3.2</span> Pipeline de estandarización (Secuencia en una sola línea)</h4>
 <p>Para convertir un archivo FASTA multilínea a un formato de una sola línea por secuencia, ejecutamos la siguiente canalización:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">sed</span> <span class="st">&#39;s/&gt;..*/&amp;____/g&#39;</span> ENTRADA <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;:a;N;$!ba;s/\n//g&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/____/\n/g&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/&gt;/\n&gt;/g&#39;</span> <span class="kw">|</span> <span class="fu">egrep</span> . <span class="op">&gt;</span> SALIDA</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Explicación paso a paso del pipeline:</p>
-<ol type="1">
-<li><code>sed &#39;s/&gt;..*/&amp;____/g&#39; ENTRADA</code>: Agrega una marca única (<code>____</code>) al final de cada línea de encabezado (que empieza con <code>&gt;</code>).</li>
-<li><code>sed &#39;:a;N;$!ba;s/\n//g&#39;</code>: Carga todo el archivo en el búfer de memoria y elimina <strong>todos</strong> los saltos de línea (<code>\n</code>), dejando el archivo completo en una sola línea continua.</li>
-<li><code>sed &#39;s/____/\n/g&#39;</code>: Restaura los saltos de línea justo después de los encabezados (donde colocamos la marca <code>____</code>).</li>
-<li><code>sed &#39;s/&gt;/\n&gt;/g&#39;</code>: Inserta un salto de línea antes de cada nuevo encabezado (<code>&gt;</code>), separando un registro del siguiente.</li>
-<li><code>egrep .</code>: Elimina cualquier línea vacía residual generada durante el proceso.</li>
-</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Explicación del pipeline con sed
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Este comando procesa un archivo FASTA en cadena (pipeline) para unificar las secuencias fragmentadas en una sola línea por secuencia:</p>
+<ul>
+<li><strong><code>sed &#39;s/&gt;..*/&amp;____/g&#39; ENTRADA</code></strong>: Busca las líneas de encabezado (que empiezan con <code>&gt;</code>) y les añade la marca <code>____</code> al final. Esto sirve para identificar dónde termina el título y dónde empieza la secuencia biológica.</li>
+<li><strong><code>sed &#39;:a;N;$!ba;s/\n//g&#39;</code></strong>: Es un truco avanzado de <code>sed</code> que carga todo el archivo en la memoria del sistema y <strong>elimina absolutamente todos los saltos de línea (<code>\n</code>)</strong>, dejando todo el texto pegado en una única línea gigante.</li>
+<li><strong><code>sed &#39;s/____/\n/g&#39;</code></strong>: Busca la marca <code>____</code> que pusimos en el primer paso y la reemplaza por un salto de línea. Esto separa el encabezado de su respectiva secuencia.</li>
+<li><strong><code>sed &#39;s/&gt;/\n&gt;/g&#39;</code></strong>: Busca cada símbolo <code>&gt;</code> y le añade un salto de línea antes. Esto separa visualmente cada registro FASTA del siguiente.</li>
+<li><strong><code>egrep . &gt; SALIDA</code></strong>: Elimina las líneas completamente vacías que hayan podido quedar tras los pasos anteriores y guarda el resultado limpio en el archivo <code>SALIDA</code>.</li>
+</ul>
+</div>
+</div>
 <hr>
 </section>
 <section id="búsqueda-de-enolasa-y-análisis" class="level4" data-number="1.2.3.3">
@@ -3485,25 +3526,6 @@ Explicación del conteo
 <li><strong>¿En cuántos organismos está el gen identificado?</strong></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Clic aquí para ver la respuesta
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Dependerá del resultado de la búsqueda en los archivos <code>.fna</code>. Anota los organismos donde <code>egrep</code> arroje coincidencias.</p>
-</div>
-</div>
-</div>
-<ol start="2" type="1">
-<li><strong>¿Qué puede ocurrir con aquellos organismos en los que la secuencia no se encuentra?</strong></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -3515,12 +3537,12 @@ Clic aquí para ver la respuesta
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Puede deberse a diferencias en la nomenclatura de la anotación (ej. nombrada como <em>“phosphopyruvate hydratase”</em>), errores de anotación automática en GenBank, o que el organismo realmente no posea la vía metabólica.</p>
+<p>Dependerá del resultado de la búsqueda en los archivos <code>.fna</code>. Anota los organismos donde <code>egrep</code> arroje coincidencias.</p>
 </div>
 </div>
 </div>
-<ol start="3" type="1">
-<li><strong>¿Se puede garantizar de alguna manera que la secuencia obtenida es de una enolasa?</strong></li>
+<ol start="2" type="1">
+<li><strong>¿Qué puede ocurrir con aquellos organismos en los que la secuencia no se encuentra?</strong></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
@@ -3534,6 +3556,25 @@ Clic aquí para ver la respuesta
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p>Puede deberse a diferencias en la nomenclatura de la anotación (ej. nombrada como <em>“phosphopyruvate hydratase”</em>), errores de anotación automática en GenBank, o que el organismo realmente no posea la vía metabólica.</p>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li><strong>¿Se puede garantizar de alguna manera que la secuencia obtenida es de una enolasa?</strong></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Clic aquí para ver la respuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>No solo por la anotación del texto. Para verificarlo rigurosamente se debe realizar una comparación de similitud de secuencia (BLAST) contra bases de datos curadas (como UniProt/SwissProt) o verificar dominios conservados (InterProScan).</p>
 </div>
 </div>
@@ -3542,7 +3583,7 @@ Clic aquí para ver la respuesta
 <li><strong>Inconvenientes y limitaciones técnicas de esta estrategia:</strong></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3551,7 +3592,7 @@ Clic aquí para ver las limitaciones
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong>Falta de robustez:</strong> Depende 100% de que la palabra <em>“enolase”</em> esté escrita explícitamente y sin faltas de ortografía en el encabezado.</li>
