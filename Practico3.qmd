@@ -1,0 +1,472 @@
+---
+title: "Guía de Trabajo Práctico: Fundamentos y Automatización en Bash"
+subtitle: "Asignatura / Curso: [Nombre de la Materia o Curso]"
+author: "[Nombre del Profesor / Autor]"
+date: last-modified
+date-format: "DD/MM/YYYY"
+lang: es
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: right
+    toc-title: "En este práctico"
+    number-sections: true
+    code-copy: true
+    code-line-numbers: true
+    smooth-scroll: true
+    embed-resources: true
+---
+
+# Práctico 3: Manejo de Textos y Bioinformática
+
+## Introducción y Objetivos
+
+En este práctico nos centraremos en el uso de herramientas de CLI para la edición y procesamiento de textos en Linux (sed, awk, uniq, grep, sort, entre otros). Mediante ejercicios prácticos aplicados a datos biológicos, aprenderás las técnicas y estrategias comunes para la manipulación eficiente de datos no estructurados.
+
+---
+
+## Ejercicio 1: Extracción de Secuencias Fasta Mediante Edición de Textos
+
+En este ejercicio, utilizarás comandos básicos del Shell para extraer una secuencia codificante específica a partir de una cadena de texto (string) dentro del encabezado de una anotación FASTA.
+
+### Ejemplo de Encabezado y Secuencia (Búsqueda de "enolase")
+
+A continuación se muestra un ejemplo del encabezado objetivo donde coincide el término "enolase":
+
+>lcl|NC_000964.3_cds_NP_389242.1_1382 [gene=mtnW] [locus_tag=BSU13590] [db_xref=GeneID:939339]
+[protein=2,3-diketo-5-methylthiopentyl-1-phosphate [enolase]{style="color: red;"}] [protein_id=NP_389242.1] [location=1427034..1428278]
+ATGGATGAAAATGAAAGGAGCTCTGGCATGAGTGAGTTATTAGCGACATATCTCCTGACCGAACCGGGAGCCGATACAGA
+GAAGAAAGCAGAACAAATCGCAACAGGATTGACAGTAGGCTCCTGGACTGATCTGCCCCTTGTAAAACAGGAGCAAATGC
+AAAAGCACAAGGGGCGGGTGATAAAAGTTGAGGAGAGAGAGGGAACTGCTGCATCAGAAAAACAAGCGGTCATCACAATT
+GCCTATCCTGAAATCAATTTCTCTCAGGATATTCCGGCTTTGCTGACAACAGTGTTTGGCAAGCTGTCCCTGGACGGAAA
+AATCAAATTAATCGATCTTCACTTCTCTGAAGCATTTAAGCGTGCACTGCCGGGACCGAAGTTTGGCGTATACGGCATCC
+GGAAGCTGCTGGGAGAGTTTGAGAGACCGCTGTTAATGAGCATATTTAAAGGCGTAATCGGAAGGGACCTGAGTGATATT
+AAAGAACAGCTCCGGCAGCAGGCGCTTGGCGGAGTTGACTTGATTAAAGACGATGAAATTTTCTTTGAGACTGGTCTAGC
+GCCTTTTGAAACAAGAATTGCAGAAGGAAAGCAAATATTGAAAGAAACGTATGAACAAACCGGACATAAAACGCTGTATG
+CGGTGAATTTGACCGGACGTACGGCTGATCTGAAAGACAAAGCGAGACGCGCCGCCGAATTGGGAGCGGATGCGCTTTTG
+TTTAATGTCTTCGCTTACGGCTTGGACGTTATGCAAGGCCTTGCAGAAGATCCTGAAATCCCAGTTCCGATTATGGCGCA
+TCCAGCAGTGAGCGGAGCGTTTACGTCTTCTCCGTTTTACGGTTTTTCTCACGCTCTTTTACTCGGAAAATTAAACCGAT
+ATTGCGGTGCTGACTTCAGCCTCTTTCCGTCTCCATATGGTTCGGTTGCGCTTCCAAGAGCAGATGCACTGGCGATTCAT
+GAAGAATGTGTGAGAGAGGATGCTTTTAACCAAACATTTGCTGTTCCGTCAGCAGGCATTCATCCCGGCATGGTTCCGCT
+ATTAATGCGTGATTTCGGCATAGACCACATTATTAACGCCGGAGGAGGCGTACATGGACATCCGAACGGTGCCCAAGGCG
+GGGGGCGAGCGTTCAGAGCTATTATTGATGCGGTCCTAGAGGCCCAGCCGATTGATGAAAAAGCCGAACAATGCAAGGAT
+CTTAAGCTTGCGCTAGATAAATGGGGAAAGGCTGAAGCCGTATGA
+
+---
+
+### Tareas a Resolver
+
+#### Paso 1: Obtención de datos crudos y análisis preliminar
+
+1. En la carpeta PRACT3 (ubicada en MATERIALES), encontrarás archivos multifasta que contienen todas las secuencias codificantes de diversos organismos procariotas.
+2. Preparación del entorno: Copia todos los archivos a tu carpeta personal dentro de un directorio llamado practico3 y trabaja desde allí.
+
+Comandos:
+mkdir -p ~/practico3
+cd ~/practico3
+cp /ruta/a/MATERIALES/PRACT3/*.fna .
+
+3. Procesamiento e inspección: Enumera los archivos e interactúa mediante tuberías (pipes) con otros comandos para generar por consola una tabla estructurada con la siguiente salida:
+
+GCF_000005845.2 ASM584v2<br>
+GCF_000007625.1 ASM762v1<br>
+GCF_000009045.1 ASM904v1<br>
+GCF_000498355.1 Ade.TY<br>
+GCF_001484935.1 ASM148493v1<br>
+
+::: {.callout-note}
+
+## Explicación del comando awk
+
+El modificador -F'_' establece el guión bajo (_) como separador de campos.
+
+* $1 y $2: Forman la primera columna (identificador de ensamblado sin extensión).
+* $3: Representa el segundo campo (versión del ensamblaje).
+
+Comando de ejemplo:
+```bash
+ls *.fna | awk -F'_' '{print $1"_"$2, $3}'
+```
+:::
+
+#### Paso 2: Conteo de genes predichos (CDS)
+
+Para contar el número de secuencias codificantes en cada archivo, utilizaremos `egrep -c` para contar las líneas de encabezado que comienzan con el carácter `>`.
+
+```bash
+# Comando de ejemplo individual:
+egrep -c ">" GCF_000005845.2.fna
+
+# Automatización para procesar todos los archivos a la vez:
+for f in *.fna; do echo -n "$f: "; egrep -c ">" "$f"; done
+
+```
+
+::: {.callout-note}
+## Análisis del comando
+
+Este bucle cuenta las secuencias de todos los archivos FASTA (`.fna`) del directorio:
+
+* **`for f in *.fna; do`**: Procesa uno a uno cada archivo con extensión `.fna` y guarda su nombre en la variable `$f`.
+* **`echo -n "$f: ";`**: Muestra el nombre del archivo en pantalla sin dar un salto de línea.
+* **`egrep -c ">" "$f";`**: Cuenta cuántas líneas contienen el símbolo `>`. En formato FASTA, esto equivale al total de secuencias.
+* **`done`**: Finaliza las instrucciones y pasa al siguiente archivo.
+:::
+
+
+Tabla de resultados:
+
+| Ensamblado | N° de CDS (Secuencias Codificantes) |
+| :--- | :--- |
+| **GCF_000005845.2** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_000007625.1** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_000009045.1** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_000498355.1** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_001484935.1** | <input type="text" placeholder="Respuesta..."> |
+
+::: {.callout-note}
+
+## Explicación del conteo
+
+En el formato FASTA, cada secuencia o gen comienza con el símbolo `>`. El parámetro `-c` de `egrep` cuenta cuántas líneas coinciden con el patrón especificado.
+:::
+
+---
+
+#### Paso 3: Estimación del contenido de bases
+
+##### a) Citosina (C) en el transcriptoma
+
+Para contar las citocinas en las secuencias, filtramos los encabezados, reemplazamos cada 'C' agregando un salto de línea antes de ella y contamos las líneas que comienzan con 'C'.
+
+```bash
+# Ejemplo de ejecucion por archivo:
+egrep -v ">" GCF_000005845.2.fna | sed 's/C/\n&/g' | egrep -c ^[C]
+
+```
+
+**¿Es posible automatizar el proceso de todos los archivos?**
+
+::: {.callout-tip collapse="true"}
+## Clic aquí para ver la respuesta
+
+```bash
+for f in *.fna; do echo -n "$f: "; egrep -v ">" "$f" | sed 's/C/\n&/g' | egrep -c "^[C]"; done
+```
+
+:::
+
+Tabla de resultados para Citosinas:
+
+| Ensamblado | N° de Citosinas |
+| :--- | :--- |
+| **GCF_000005845.2** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_000007625.1** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_000009045.1** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_000498355.1** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_001484935.1** | <input type="text" placeholder="Respuesta..."> |
+
+##### b) Porcentaje de GC (%GC) en el transcriptoma
+
+Para calcular el porcentaje de GC, contamos el número total de C y G y lo dividimos entre la longitud total de nucleótidos (contados con `wc -m` o `wc -c` excluyendo encabezados).
+
+```bash
+# 1. Obtener conteo de G y C:
+egrep -v ">" archivo.fna | sed 's/[CGAT]/\n&/g' | egrep -c ^[CG]
+
+# 2. Obtener el numero total de bases (A, C, G, T):
+egrep -v ">" archivo.fna | tr -d '\n' | wc -m
+
+```
+
+**¿Es posible automatizar el proceso de todos los archivos?**
+
+::: {.callout-tip collapse="true"}
+## Clic aquí para ver la respuesta
+
+```bash
+for f in *.fna; do echo -n "$f: "; egrep -v ">" "$f" | sed 's/[CGAT]/\n&/g' | egrep -c "^[CG]"; done
+```
+
+```bash
+for f in *.fna; do echo -n "$f: "; egrep -v ">" "$f" | tr -d '\n' | wc -m; done
+```
+:::
+
+Tabla de resultados de %GC:
+
+| Ensamblado | % Guanina y Citosina |
+| :--- | :--- |
+| **GCF_000005845.2** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_000007625.1** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_000009045.1** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_000498355.1** | <input type="text" placeholder="Respuesta..."> |
+| **GCF_001484935.1** | <input type="text" placeholder="Respuesta..."> |
+
+
+---
+
+### Estandarización del Archivo Multifasta
+
+#### El problema de las secuencias multilínea
+
+En un archivo FASTA estándar, las secuencias biológicas pueden dividirse en múltiples líneas de ancho fijo (por ejemplo, 80 caracteres por línea).
+
+::: {.callout-warning}
+
+## ¿Por qué es esto un problema?
+
+Comandos como `grep` o `egrep` procesan archivos **línea por línea**. Si la búsqueda requiere extraer el encabezado junto con su secuencia usando opciones como `-A 1` (mostrar la línea siguiente), solo se extraerá la *primera línea* de la secuencia si esta se encuentra fragmentada en múltiples líneas, perdiendo el resto del gen.
+:::
+
+#### Pipeline de estandarización (Secuencia en una sola línea)
+
+Para convertir un archivo FASTA multilínea a un formato de una sola línea por secuencia, ejecutamos la siguiente canalización:
+
+```bash
+sed 's/>..*/&____/g' ENTRADA | sed ':a;N;$!ba;s/\n//g' | sed 's/____/\n/g' | sed 's/>/\n>/g' | egrep . > SALIDA
+
+```
+
+::: {.callout-note}
+## Explicación del pipeline con sed
+
+Este comando procesa un archivo FASTA en cadena (pipeline) para unificar las secuencias fragmentadas en una sola línea por secuencia:
+
+* **`sed 's/>..*/&____/g' ENTRADA`**: Busca las líneas de encabezado (que empiezan con `>`) y les añade la marca `____` al final. Esto sirve para identificar dónde termina el título y dónde empieza la secuencia biológica.
+* **`sed ':a;N;$!ba;s/\n//g'`**: Es un truco avanzado de `sed` que carga todo el archivo en la memoria del sistema y **elimina absolutamente todos los saltos de línea (`\n`)**, dejando todo el texto pegado en una única línea gigante.
+* **`sed 's/____/\n/g'`**: Busca la marca `____` que pusimos en el primer paso y la reemplaza por un salto de línea. Esto separa el encabezado de su respectiva secuencia.
+* **`sed 's/>/\n>/g'`**: Busca cada símbolo `>` y le añade un salto de línea antes. Esto separa visualmente cada registro FASTA del siguiente.
+* **`egrep . > SALIDA`**: Elimina las líneas completamente vacías que hayan podido quedar tras los pasos anteriores y guarda el resultado limpio en el archivo `SALIDA`.
+:::
+
+---
+
+#### Búsqueda de Enolasa y Análisis
+
+Una vez formateados los archivos de salida, buscamos el término "enolase":
+
+```bash
+egrep -i -A 1 "enolase" archivo_formateado.fna
+
+```
+
+### Preguntas de Reflexión
+
+1. **¿En cuántos organismos está el gen identificado?**
+
+::: {.callout-tip collapse="true"}
+## Clic aquí para ver la respuesta
+Dependerá del resultado de la búsqueda en los archivos `.fna`. Anota los organismos donde `egrep` arroje coincidencias.
+:::
+
+2. **¿Qué puede ocurrir con aquellos organismos en los que la secuencia no se encuentra?**
+
+::: {.callout-tip collapse="true"}
+## Clic aquí para ver la respuesta
+Puede deberse a diferencias en la nomenclatura de la anotación (ej. nombrada como *"phosphopyruvate hydratase"*), errores de anotación automática en GenBank, o que el organismo realmente no posea la vía metabólica.
+:::
+
+3. **¿Se puede garantizar de alguna manera que la secuencia obtenida es de una enolasa?**
+
+::: {.callout-tip collapse="true"}
+## Clic aquí para ver la respuesta
+No solo por la anotación del texto. Para verificarlo rigurosamente se debe realizar una comparación de similitud de secuencia (BLAST) contra bases de datos curadas (como UniProt/SwissProt) o verificar dominios conservados (InterProScan).
+:::
+
+4. **Inconvenientes y limitaciones técnicas de esta estrategia:**
+
+::: {.callout-tip collapse="true"}
+## Clic aquí para ver las limitaciones
+- **Falta de robustez:** Depende 100% de que la palabra *"enolase"* esté escrita explícitamente y sin faltas de ortografía en el encabezado.
+- **Falsos negativos:** Se pierden secuencias homólogas no anotadas o descritas como *"hypothetical protein"*.
+- **Escalabilidad:** Procesar texto plano mediante expresiones regulares en archivos genómicos de gran tamaño es ineficiente y propenso a errores de formato.
+:::
+
+---
+
+## Ejercicio 2: Identificación y Extracción de Secuencias Utilizando BLAST
+
+### Paso 1: Instalación de BLAST+
+
+Para instalar el paquete oficial de BLAST en sistemas Debian/Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install ncbi-blast+
+
+```
+
+---
+
+### Paso 2: Construcción de la Base de Datos de Proteínas
+
+Concatenamos todos los archivos `.fna`, traducimos las secuencias de nucleótidos a aminoácidos con `transeq` y creamos la base de datos binaria de BLAST.
+
+```bash
+# 1. Concatenar todos los archivos FASTA de nucleotidos
+cat *.fna > todos.fna
+
+# 2. Traducir nucleotidos a aminoacidos (EMBOSS transeq)
+transeq todos.fna todos.faa
+
+# 3. Construir la base de datos de BLAST para proteinas
+makeblastdb -in todos.faa -dbtype prot -out base_datos_prot -parse_seqids
+
+```
+
+::: {.callout-note}
+
+## Opciones de `makeblastdb`
+
+* `-dbtype prot`: Especifica que la base de datos contiene secuencias de proteínas (aminoácidos).
+* `-parse_seqids`: Permite indexar y recuperar posteriormente secuencias individuales por su ID utilizando `blastdbcmd`.
+:::
+
+---
+
+### Paso 3: Búsqueda por Similitud (BLASTp)
+
+#### Preparación del Query
+
+Obtenemos la secuencia de referencia en formato FASTA desde NCBI GenBank y la guardamos en `SequenciasQuery.fas`
+
+Para obtener la secuencia de referencia, ingresa a la [base de datos de proteínas de NCBI (Enolasa en E. coli)](https://www.ncbi.nlm.nih.gov/protein/?term=(enolase)+AND+%22Escherichia+coli%22%5Bporgn%3A__txid562%5D).
+
+```bash
+# Abrir editor nano/vim para guardar la secuencia query
+nano SequenciasQuery.fas
+
+```
+
+#### Ejecución de BLASTp
+
+Ejecutamos la búsqueda por similitud usando alineamiento local de proteínas:
+
+```bash
+blastp -db base_datos_prot \
+       -query SequenciasQuery.fas \
+       -out GCF_Q.bl \
+       -evalue 1e-5 \
+       -num_threads 1 \
+       -max_target_seqs 20 \
+       -outfmt '7 std qcovs'
+
+```
+
+#### Inspección e Interpretación de Resultados
+
+Para examinar el archivo de salida:
+
+```bash
+less GCF_Q.bl
+
+```
+
+::: {.callout-tip}
+
+## Significado de las Columnas en `-outfmt '7 std qcovs'`
+
+El formato 7 agrega encabezados explicativos iniciados por `#`. Las 13 columnas representan:
+
+1. `qaccver`: ID de la secuencia query.
+2. `saccver`: ID de la secuencia sujeto (target/hit).
+3. `pident`: Porcentaje de identidad de aminoácidos.
+4. `length`: Longitud total del alineamiento.
+5. `mismatch`: Número de desalineamientos (mismatches).
+6. `gapopen`: Número de aperturas de huecos (gaps).
+7. `qstart`: Posición inicial del alineamiento en el query.
+8. `qend`: Posición final del alineamiento en el query.
+9. `sstart`: Posición inicial del alineamiento en el sujeto.
+10. `send`: Posición final del alineamiento en el sujeto.
+11. `evalue`: Valor E (Expect value; probabilidad de encontrar la coincidencia al azar).
+12. `bitscore`: Puntuación del alineamiento (Score en bits).
+13. `qcovs`: Cobertura del query por la secuencia sujeto (porcentaje).
+:::
+
+---
+
+### Paso 4: Procesamiento y Filtrado de Salida
+
+Filtrar los resultados ignorando los comentarios del encabezado (`#`) y seleccionando hits con **cobertura igual o superior al 100%** (Columna 13):
+
+```bash
+egrep -v "^#" GCF_Q.bl | awk '$13 >= 100'
+
+```
+
+#### Filtrado multicriterio
+
+Se pueden aplicar múltiples condiciones directamente con `awk`. Por ejemplo, cobertura $\ge 100\%$ e identidad $\ge 80\%$:
+
+```bash
+egrep -v "^#" GCF_Q.bl | awk '$13 >= 100 && $3 >= 80'
+
+```
+
+---
+
+### Paso 5: Extracción de Secuencias desde la Base de Datos
+
+Para extraer una secuencia individual específica de la base de datos con su ID mediante `blastdbcmd`:
+
+```bash
+blastdbcmd -entry "NC_000913.3_cds_NP_417259.1_2742_1" -db base_datos_prot -out salida.fas
+
+```
+
+---
+
+### Trabajo Domiciliario
+
+#### 6. Filtrado con Criterios de Identidad y Cobertura
+
+Filtrar los resultados según los dos conjuntos de restricciones:
+
+```bash
+# Criterio A: >62% de identidad (Col. 3) y >98% de cobertura (Col. 13)
+egrep -v "^#" GCF_Q.bl | awk '$3 > 62 && $13 > 98'
+
+# Criterio B: >50% de identidad (Col. 3) y >90% de cobertura (Col. 13)
+egrep -v "^#" GCF_Q.bl | awk '$3 > 50 && $13 > 90'
+
+```
+
+---
+
+#### 7. Extracción Automatizada en Lote
+
+Guardar los IDs de las secuencias filtradas en un archivo y utilizarlos para la extracción masiva:
+
+```bash
+# 1. Guardar la lista de IDs unicos que cumplen los criterios
+egrep -v "^#" GCF_Q.bl | awk '($3 > 62 && $13 > 98) || ($3 > 50 && $13 > 90) {print $2}' | sort -u > lista_ids.txt
+
+# 2. Extraer todas las secuencias de la lista en un unico archivo FASTA
+blastdbcmd -db base_datos_prot -entry_batch lista_ids.txt -out secuencias_filtradas.faa
+
+```
+
+---
+
+#### 8. Reconstrucción de Árbol Filogenético
+
+Alineamiento múltiple de secuencias y construcción del árbol filogenético:
+
+```bash
+# 1. Realizar el alineamiento multiple de secuencias con MUSCLE
+muscle -in secuencias_filtradas.faa -out alineamiento.afa
+
+# 2. Generar el arbol filogenetico con FastTree (Maximum Likelihood)
+fasttree -nwk alineamiento.afa > arbol_filogenetico.nwk
+
+```
+
+::: {.callout-note}
+
+## Visualización del Árbol
+
+El archivo resultante `.nwk` (formato Newick) puede visualizarse en herramientas como **FigTree**, **iTOL** (online) o mediante paquetes R como `ggtree`.
+:::
+
