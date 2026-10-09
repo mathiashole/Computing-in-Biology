@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="[Nombre del Profesor / Autor]">
-<meta name="dcterms.date" content="2026-08-10">
+<meta name="dcterms.date" content="2026-09-10">
 
 <title>Guía de Trabajo Práctico: Fundamentos y Automatización en Bash</title>
 <style>
@@ -3280,7 +3280,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">08/10/2026</p>
+      <p class="date">09/10/2026</p>
     </div>
   </div>
   
@@ -3423,6 +3423,23 @@ Explicación del conteo
 <p>Para contar las citocinas en las secuencias, filtramos los encabezados, reemplazamos cada ‘C’ agregando un salto de línea antes de ella y contamos las líneas que comienzan con ‘C’.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Ejemplo de ejecucion por archivo:</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> GCF_000005845.2.fna <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/C/\n&amp;/g&#39;</span> <span class="kw">|</span> <span class="fu">egrep</span> <span class="at">-c</span> ^<span class="pp">[</span><span class="ss">C</span><span class="pp">]</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>¿Es posible automatizar el proceso de todos los archivos?</strong></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Clic aquí para ver la respuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>.fna<span class="kw">;</span> <span class="cf">do</span> <span class="bu">echo</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$f</span><span class="st">: &quot;</span><span class="kw">;</span> <span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> <span class="st">&quot;</span><span class="va">$f</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/C/\n&amp;/g&#39;</span> <span class="kw">|</span> <span class="fu">egrep</span> <span class="at">-c</span> <span class="st">&quot;^[C]&quot;</span><span class="kw">;</span> <span class="cf">done</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 <p>Tabla de resultados para Citosinas:</p>
 <table class="caption-top table">
 <thead>
@@ -3458,11 +3475,29 @@ Explicación del conteo
 <section id="b-porcentaje-de-gc-gc-en-el-transcriptoma" class="level5" data-number="1.2.2.3.2">
 <h5 data-number="1.2.2.3.2" class="anchored" data-anchor-id="b-porcentaje-de-gc-gc-en-el-transcriptoma"><span class="header-section-number">1.2.2.3.2</span> b) Porcentaje de GC (%GC) en el transcriptoma</h5>
 <p>Para calcular el porcentaje de GC, contamos el número total de C y G y lo dividimos entre la longitud total de nucleótidos (contados con <code>wc -m</code> o <code>wc -c</code> excluyendo encabezados).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># 1. Obtener conteo de G y C:</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> archivo.fna <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/[CGAT]/\n&amp;/g&#39;</span> <span class="kw">|</span> <span class="fu">egrep</span> <span class="at">-c</span> ^<span class="pp">[</span><span class="ss">CG</span><span class="pp">]</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># 2. Obtener el numero total de bases (A, C, G, T):</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> archivo.fna <span class="kw">|</span> <span class="fu">tr</span> <span class="at">-d</span> <span class="st">&#39;\n&#39;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-m</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># 1. Obtener conteo de G y C:</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> archivo.fna <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/[CGAT]/\n&amp;/g&#39;</span> <span class="kw">|</span> <span class="fu">egrep</span> <span class="at">-c</span> ^<span class="pp">[</span><span class="ss">CG</span><span class="pp">]</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># 2. Obtener el numero total de bases (A, C, G, T):</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> archivo.fna <span class="kw">|</span> <span class="fu">tr</span> <span class="at">-d</span> <span class="st">&#39;\n&#39;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-m</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>¿Es posible automatizar el proceso de todos los archivos?</strong></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Clic aquí para ver la respuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>.fna<span class="kw">;</span> <span class="cf">do</span> <span class="bu">echo</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$f</span><span class="st">: &quot;</span><span class="kw">;</span> <span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> <span class="st">&quot;</span><span class="va">$f</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/[CGAT]/\n&amp;/g&#39;</span> <span class="kw">|</span> <span class="fu">egrep</span> <span class="at">-c</span> <span class="st">&quot;^[CG]&quot;</span><span class="kw">;</span> <span class="cf">done</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="pp">*</span>.fna<span class="kw">;</span> <span class="cf">do</span> <span class="bu">echo</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$f</span><span class="st">: &quot;</span><span class="kw">;</span> <span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> <span class="st">&quot;</span><span class="va">$f</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="at">-d</span> <span class="st">&#39;\n&#39;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-m</span><span class="kw">;</span> <span class="cf">done</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 <p>Tabla de resultados de %GC:</p>
 <table class="caption-top table">
 <thead>
@@ -3520,7 +3555,7 @@ Explicación del conteo
 <section id="pipeline-de-estandarización-secuencia-en-una-sola-línea" class="level4" data-number="1.2.3.2">
 <h4 data-number="1.2.3.2" class="anchored" data-anchor-id="pipeline-de-estandarización-secuencia-en-una-sola-línea"><span class="header-section-number">1.2.3.2</span> Pipeline de estandarización (Secuencia en una sola línea)</h4>
 <p>Para convertir un archivo FASTA multilínea a un formato de una sola línea por secuencia, ejecutamos la siguiente canalización:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">sed</span> <span class="st">&#39;s/&gt;..*/&amp;____/g&#39;</span> ENTRADA <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;:a;N;$!ba;s/\n//g&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/____/\n/g&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/&gt;/\n&gt;/g&#39;</span> <span class="kw">|</span> <span class="fu">egrep</span> . <span class="op">&gt;</span> SALIDA</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">sed</span> <span class="st">&#39;s/&gt;..*/&amp;____/g&#39;</span> ENTRADA <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;:a;N;$!ba;s/\n//g&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/____/\n/g&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/&gt;/\n&gt;/g&#39;</span> <span class="kw">|</span> <span class="fu">egrep</span> . <span class="op">&gt;</span> SALIDA</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3546,51 +3581,13 @@ Explicación del pipeline con sed
 <section id="búsqueda-de-enolasa-y-análisis" class="level4" data-number="1.2.3.3">
 <h4 data-number="1.2.3.3" class="anchored" data-anchor-id="búsqueda-de-enolasa-y-análisis"><span class="header-section-number">1.2.3.3</span> Búsqueda de Enolasa y Análisis</h4>
 <p>Una vez formateados los archivos de salida, buscamos el término “enolase”:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">egrep</span> <span class="at">-i</span> <span class="at">-A</span> 1 <span class="st">&quot;enolase&quot;</span> archivo_formateado.fna</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">egrep</span> <span class="at">-i</span> <span class="at">-A</span> 1 <span class="st">&quot;enolase&quot;</span> archivo_formateado.fna</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="preguntas-de-reflexión" class="level3" data-number="1.2.4">
 <h3 data-number="1.2.4" class="anchored" data-anchor-id="preguntas-de-reflexión"><span class="header-section-number">1.2.4</span> Preguntas de Reflexión</h3>
 <ol type="1">
 <li><strong>¿En cuántos organismos está el gen identificado?</strong></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Clic aquí para ver la respuesta
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Dependerá del resultado de la búsqueda en los archivos <code>.fna</code>. Anota los organismos donde <code>egrep</code> arroje coincidencias.</p>
-</div>
-</div>
-</div>
-<ol start="2" type="1">
-<li><strong>¿Qué puede ocurrir con aquellos organismos en los que la secuencia no se encuentra?</strong></li>
-</ol>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Clic aquí para ver la respuesta
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Puede deberse a diferencias en la nomenclatura de la anotación (ej. nombrada como <em>“phosphopyruvate hydratase”</em>), errores de anotación automática en GenBank, o que el organismo realmente no posea la vía metabólica.</p>
-</div>
-</div>
-</div>
-<ol start="3" type="1">
-<li><strong>¿Se puede garantizar de alguna manera que la secuencia obtenida es de una enolasa?</strong></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
@@ -3604,6 +3601,44 @@ Clic aquí para ver la respuesta
 </div>
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p>Dependerá del resultado de la búsqueda en los archivos <code>.fna</code>. Anota los organismos donde <code>egrep</code> arroje coincidencias.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li><strong>¿Qué puede ocurrir con aquellos organismos en los que la secuencia no se encuentra?</strong></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Clic aquí para ver la respuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Puede deberse a diferencias en la nomenclatura de la anotación (ej. nombrada como <em>“phosphopyruvate hydratase”</em>), errores de anotación automática en GenBank, o que el organismo realmente no posea la vía metabólica.</p>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li><strong>¿Se puede garantizar de alguna manera que la secuencia obtenida es de una enolasa?</strong></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Clic aquí para ver la respuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>No solo por la anotación del texto. Para verificarlo rigurosamente se debe realizar una comparación de similitud de secuencia (BLAST) contra bases de datos curadas (como UniProt/SwissProt) o verificar dominios conservados (InterProScan).</p>
 </div>
 </div>
@@ -3612,7 +3647,7 @@ Clic aquí para ver la respuesta
 <li><strong>Inconvenientes y limitaciones técnicas de esta estrategia:</strong></li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3621,7 +3656,7 @@ Clic aquí para ver las limitaciones
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li><strong>Falta de robustez:</strong> Depende 100% de que la palabra <em>“enolase”</em> esté escrita explícitamente y sin faltas de ortografía en el encabezado.</li>
@@ -3639,21 +3674,21 @@ Clic aquí para ver las limitaciones
 <section id="paso-1-instalación-de-blast" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="paso-1-instalación-de-blast"><span class="header-section-number">1.3.1</span> Paso 1: Instalación de BLAST+</h3>
 <p>Para instalar el paquete oficial de BLAST en sistemas Debian/Ubuntu:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">sudo</span> apt update</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">sudo</span> apt install ncbi-blast+</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">sudo</span> apt install ncbi-blast+</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
 <section id="paso-2-construcción-de-la-base-de-datos-de-proteínas" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="paso-2-construcción-de-la-base-de-datos-de-proteínas"><span class="header-section-number">1.3.2</span> Paso 2: Construcción de la Base de Datos de Proteínas</h3>
 <p>Concatenamos todos los archivos <code>.fna</code>, traducimos las secuencias de nucleótidos a aminoácidos con <code>transeq</code> y creamos la base de datos binaria de BLAST.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># 1. Concatenar todos los archivos FASTA de nucleotidos</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">cat</span> <span class="pp">*</span>.fna <span class="op">&gt;</span> todos.fna</span>
-<span id="cb8-3"><a href="#cb8-3"></a></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># 2. Traducir nucleotidos a aminoacidos (EMBOSS transeq)</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="ex">transeq</span> todos.fna todos.faa</span>
-<span id="cb8-6"><a href="#cb8-6"></a></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co"># 3. Construir la base de datos de BLAST para proteinas</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="ex">makeblastdb</span> <span class="at">-in</span> todos.faa <span class="at">-dbtype</span> prot <span class="at">-out</span> base_datos_prot <span class="at">-parse_seqids</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># 1. Concatenar todos los archivos FASTA de nucleotidos</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">cat</span> <span class="pp">*</span>.fna <span class="op">&gt;</span> todos.fna</span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># 2. Traducir nucleotidos a aminoacidos (EMBOSS transeq)</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="ex">transeq</span> todos.fna todos.faa</span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># 3. Construir la base de datos de BLAST para proteinas</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="ex">makeblastdb</span> <span class="at">-in</span> todos.faa <span class="at">-dbtype</span> prot <span class="at">-out</span> base_datos_prot <span class="at">-parse_seqids</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3678,24 +3713,24 @@ Opciones de <code>makeblastdb</code>
 <h4 data-number="1.3.3.1" class="anchored" data-anchor-id="preparación-del-query"><span class="header-section-number">1.3.3.1</span> Preparación del Query</h4>
 <p>Obtenemos la secuencia de referencia en formato FASTA desde NCBI GenBank y la guardamos en <code>SequenciasQuery.fas</code></p>
 <p>Para obtener la secuencia de referencia, ingresa a la <a href="https://www.ncbi.nlm.nih.gov/protein/?term=(enolase)+AND+%22Escherichia+coli%22%5Bporgn%3A__txid562%5D">base de datos de proteínas de NCBI (Enolasa en E. coli)</a>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Abrir editor joe (o nano/vim) para guardar la secuencia query</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="ex">joe</span> SequenciasQuery.fas</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Abrir editor nano/vim para guardar la secuencia query</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">nano</span> SequenciasQuery.fas</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="ejecución-de-blastp" class="level4" data-number="1.3.3.2">
 <h4 data-number="1.3.3.2" class="anchored" data-anchor-id="ejecución-de-blastp"><span class="header-section-number">1.3.3.2</span> Ejecución de BLASTp</h4>
 <p>Ejecutamos la búsqueda por similitud usando alineamiento local de proteínas:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">blastp</span> <span class="at">-db</span> base_datos_prot <span class="dt">\</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>       <span class="at">-query</span> SequenciasQuery.fas <span class="dt">\</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a>       <span class="at">-out</span> GCF_Q.bl <span class="dt">\</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>       <span class="at">-evalue</span> 1e-5 <span class="dt">\</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a>       <span class="at">-num_threads</span> 1 <span class="dt">\</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a>       <span class="at">-max_target_seqs</span> 20 <span class="dt">\</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>       <span class="at">-outfmt</span> <span class="st">&#39;7 std qcovs&#39;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="ex">blastp</span> <span class="at">-db</span> base_datos_prot <span class="dt">\</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>       <span class="at">-query</span> SequenciasQuery.fas <span class="dt">\</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>       <span class="at">-out</span> GCF_Q.bl <span class="dt">\</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>       <span class="at">-evalue</span> 1e-5 <span class="dt">\</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a>       <span class="at">-num_threads</span> 1 <span class="dt">\</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a>       <span class="at">-max_target_seqs</span> 20 <span class="dt">\</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a>       <span class="at">-outfmt</span> <span class="st">&#39;7 std qcovs&#39;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="inspección-e-interpretación-de-resultados" class="level4" data-number="1.3.3.3">
 <h4 data-number="1.3.3.3" class="anchored" data-anchor-id="inspección-e-interpretación-de-resultados"><span class="header-section-number">1.3.3.3</span> Inspección e Interpretación de Resultados</h4>
 <p>Para examinar el archivo de salida:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">less</span> GCF_Q.bl</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">less</span> GCF_Q.bl</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3730,18 +3765,18 @@ Significado de las Columnas en <code>-outfmt &#39;7 std qcovs&#39;</code>
 <section id="paso-4-procesamiento-y-filtrado-de-salida" class="level3" data-number="1.3.4">
 <h3 data-number="1.3.4" class="anchored" data-anchor-id="paso-4-procesamiento-y-filtrado-de-salida"><span class="header-section-number">1.3.4</span> Paso 4: Procesamiento y Filtrado de Salida</h3>
 <p>Filtrar los resultados ignorando los comentarios del encabezado (<code>#</code>) y seleccionando hits con <strong>cobertura igual o superior al 100%</strong> (Columna 13):</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$13 &gt;= 100&#39;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$13 &gt;= 100&#39;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="filtrado-multicriterio" class="level4" data-number="1.3.4.1">
 <h4 data-number="1.3.4.1" class="anchored" data-anchor-id="filtrado-multicriterio"><span class="header-section-number">1.3.4.1</span> Filtrado multicriterio</h4>
 <p>Se pueden aplicar múltiples condiciones directamente con <code>awk</code>. Por ejemplo, cobertura <span class="math inline">\(\ge 100\%\)</span> e identidad <span class="math inline">\(\ge 80\%\)</span>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$13 &gt;= 100 &amp;&amp; $3 &gt;= 80&#39;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$13 &gt;= 100 &amp;&amp; $3 &gt;= 80&#39;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
 </section>
 <section id="paso-5-extracción-de-secuencias-desde-la-base-de-datos" class="level3" data-number="1.3.5">
 <h3 data-number="1.3.5" class="anchored" data-anchor-id="paso-5-extracción-de-secuencias-desde-la-base-de-datos"><span class="header-section-number">1.3.5</span> Paso 5: Extracción de Secuencias desde la Base de Datos</h3>
 <p>Para extraer una secuencia individual específica de la base de datos con su ID mediante <code>blastdbcmd</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a><span class="ex">blastdbcmd</span> <span class="at">-entry</span> <span class="st">&quot;NC_000913.3_cds_NP_417259.1_2742_1&quot;</span> <span class="at">-db</span> base_datos_prot <span class="at">-out</span> salida.fas</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="ex">blastdbcmd</span> <span class="at">-entry</span> <span class="st">&quot;NC_000913.3_cds_NP_417259.1_2742_1&quot;</span> <span class="at">-db</span> base_datos_prot <span class="at">-out</span> salida.fas</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
 <section id="trabajo-domiciliario" class="level3" data-number="1.3.6">
@@ -3749,31 +3784,31 @@ Significado de las Columnas en <code>-outfmt &#39;7 std qcovs&#39;</code>
 <section id="filtrado-con-criterios-de-identidad-y-cobertura" class="level4" data-number="1.3.6.1">
 <h4 data-number="1.3.6.1" class="anchored" data-anchor-id="filtrado-con-criterios-de-identidad-y-cobertura"><span class="header-section-number">1.3.6.1</span> 6. Filtrado con Criterios de Identidad y Cobertura</h4>
 <p>Filtrar los resultados según los dos conjuntos de restricciones:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Criterio A: &gt;62% de identidad (Col. 3) y &gt;98% de cobertura (Col. 13)</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$3 &gt; 62 &amp;&amp; $13 &gt; 98&#39;</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a></span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co"># Criterio B: &gt;50% de identidad (Col. 3) y &gt;90% de cobertura (Col. 13)</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$3 &gt; 50 &amp;&amp; $13 &gt; 90&#39;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Criterio A: &gt;62% de identidad (Col. 3) y &gt;98% de cobertura (Col. 13)</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$3 &gt; 62 &amp;&amp; $13 &gt; 98&#39;</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co"># Criterio B: &gt;50% de identidad (Col. 3) y &gt;90% de cobertura (Col. 13)</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$3 &gt; 50 &amp;&amp; $13 &gt; 90&#39;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
 <section id="extracción-automatizada-en-lote" class="level4" data-number="1.3.6.2">
 <h4 data-number="1.3.6.2" class="anchored" data-anchor-id="extracción-automatizada-en-lote"><span class="header-section-number">1.3.6.2</span> 7. Extracción Automatizada en Lote</h4>
 <p>Guardar los IDs de las secuencias filtradas en un archivo y utilizarlos para la extracción masiva:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># 1. Guardar la lista de IDs unicos que cumplen los criterios</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;($3 &gt; 62 &amp;&amp; $13 &gt; 98) || ($3 &gt; 50 &amp;&amp; $13 &gt; 90) {print $2}&#39;</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-u</span> <span class="op">&gt;</span> lista_ids.txt</span>
-<span id="cb16-3"><a href="#cb16-3"></a></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="co"># 2. Extraer todas las secuencias de la lista en un unico archivo FASTA</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a><span class="ex">blastdbcmd</span> <span class="at">-db</span> base_datos_prot <span class="at">-entry_batch</span> lista_ids.txt <span class="at">-out</span> secuencias_filtradas.faa</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># 1. Guardar la lista de IDs unicos que cumplen los criterios</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;^#&quot;</span> GCF_Q.bl <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;($3 &gt; 62 &amp;&amp; $13 &gt; 98) || ($3 &gt; 50 &amp;&amp; $13 &gt; 90) {print $2}&#39;</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-u</span> <span class="op">&gt;</span> lista_ids.txt</span>
+<span id="cb19-3"><a href="#cb19-3"></a></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># 2. Extraer todas las secuencias de la lista en un unico archivo FASTA</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="ex">blastdbcmd</span> <span class="at">-db</span> base_datos_prot <span class="at">-entry_batch</span> lista_ids.txt <span class="at">-out</span> secuencias_filtradas.faa</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
 </section>
 <section id="reconstrucción-de-árbol-filogenético" class="level4" data-number="1.3.6.3">
 <h4 data-number="1.3.6.3" class="anchored" data-anchor-id="reconstrucción-de-árbol-filogenético"><span class="header-section-number">1.3.6.3</span> 8. Reconstrucción de Árbol Filogenético</h4>
 <p>Alineamiento múltiple de secuencias y construcción del árbol filogenético:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># 1. Realizar el alineamiento multiple de secuencias con MUSCLE</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="ex">muscle</span> <span class="at">-in</span> secuencias_filtradas.faa <span class="at">-out</span> alineamiento.afa</span>
-<span id="cb17-3"><a href="#cb17-3"></a></span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="co"># 2. Generar el arbol filogenetico con FastTree (Maximum Likelihood)</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a><span class="ex">fasttree</span> <span class="at">-nwk</span> alineamiento.afa <span class="op">&gt;</span> arbol_filogenetico.nwk</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># 1. Realizar el alineamiento multiple de secuencias con MUSCLE</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="ex">muscle</span> <span class="at">-in</span> secuencias_filtradas.faa <span class="at">-out</span> alineamiento.afa</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co"># 2. Generar el arbol filogenetico con FastTree (Maximum Likelihood)</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="ex">fasttree</span> <span class="at">-nwk</span> alineamiento.afa <span class="op">&gt;</span> arbol_filogenetico.nwk</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3829,17 +3864,17 @@ Nota de Teoría: ¿Qué es Bash?
 <section id="creación-de-estructura-de-trabajo" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="creación-de-estructura-de-trabajo"><span class="header-section-number">1.5.1</span> Creación de estructura de trabajo</h3>
 <p>Ejecuta el siguiente bloque de comandos para preparar tu directorio de trabajo del práctico:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># 1. Crear la estructura de carpetas para el práctico</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/practico_bash/<span class="dt">{datos</span><span class="op">,</span><span class="dt">scripts</span><span class="op">,</span><span class="dt">respaldos}</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a></span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="co"># 2. Navegar al directorio de scripts</span></span>
-<span id="cb18-5"><a href="#cb18-5"></a><span class="bu">cd</span> ~/practico_bash/scripts</span>
-<span id="cb18-6"><a href="#cb18-6"></a></span>
-<span id="cb18-7"><a href="#cb18-7"></a><span class="co"># 3. Crear un archivo de texto de prueba</span></span>
-<span id="cb18-8"><a href="#cb18-8"></a><span class="bu">echo</span> <span class="st">&quot;Lista de servidores activos&quot;</span> <span class="op">&gt;</span> lista.txt</span>
-<span id="cb18-9"><a href="#cb18-9"></a></span>
-<span id="cb18-10"><a href="#cb18-10"></a><span class="co"># 4. Verificar la estructura creada</span></span>
-<span id="cb18-11"><a href="#cb18-11"></a><span class="fu">ls</span> <span class="at">-lR</span> ~/practico_bash</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># 1. Crear la estructura de carpetas para el práctico</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/practico_bash/<span class="dt">{datos</span><span class="op">,</span><span class="dt">scripts</span><span class="op">,</span><span class="dt">respaldos}</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co"># 2. Navegar al directorio de scripts</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="bu">cd</span> ~/practico_bash/scripts</span>
+<span id="cb21-6"><a href="#cb21-6"></a></span>
+<span id="cb21-7"><a href="#cb21-7"></a><span class="co"># 3. Crear un archivo de texto de prueba</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a><span class="bu">echo</span> <span class="st">&quot;Lista de servidores activos&quot;</span> <span class="op">&gt;</span> lista.txt</span>
+<span id="cb21-9"><a href="#cb21-9"></a></span>
+<span id="cb21-10"><a href="#cb21-10"></a><span class="co"># 4. Verificar la estructura creada</span></span>
+<span id="cb21-11"><a href="#cb21-11"></a><span class="fu">ls</span> <span class="at">-lR</span> ~/practico_bash</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 </section>
