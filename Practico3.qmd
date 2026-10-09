@@ -1,7 +1,7 @@
 ---
-title: "Guía de Trabajo Práctico: Fundamentos y Automatización en Bash"
-subtitle: "Asignatura / Curso: [Nombre de la Materia o Curso]"
-author: "[Nombre del Profesor / Autor]"
+title: "Guía de actividades (Práctico 3) en Bash"
+subtitle: "Computación en Biología"
+author: "Mathias"
 date: last-modified
 date-format: "DD/MM/YYYY"
 lang: es
