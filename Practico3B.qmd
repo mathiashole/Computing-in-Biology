@@ -1,0 +1,279 @@
+---
+title: "Guía de actividades (Práctico 3 B) en Bash"
+subtitle: "Computación en Biología"
+author: "Mathias"
+date: last-modified
+date-format: "DD/MM/YYYY"
+lang: es
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: right
+    toc-title: "En este práctico"
+    number-sections: true
+    code-copy: true
+    code-line-numbers: true
+    smooth-scroll: true
+    embed-resources: true
+---
+
+## Ejercicio 1 (Continuación): Manejo de infoseq y filtrado con awk y sed
+
+## Tareas a Resolver
+
+1. Obtener información de las secuencias codificantes utilizando la herramienta infoseq del paquete EMBOSS.
+
+```bash 
+infoseq GCF_000005845.2_ASM584v2_cds_from_genomic.fna > informacion.tab
+``` 
+2. Utilizando las herramientas de edición de comandos, contar las secuencias que tienen menos de 100 aminoácidos. 
+
+::: {.callout-note}
+
+## Columna 6
+La columna 6 indica el largo en nucleótidos
+
+:::
+
+¿Cuál es el comando óptimo para el conteo?
+
+::: {.callout-tip collapse="true"}
+## Clic aquí para ver la respuesta
+```bash
+awk 'NR > 1 && $6 < 300 {count++} END {print count}' informacion.tab
+```
+:::
+
+3. Genere una lista con los códigos de acceso a proteínas de las secuencias que cumplen con esta condición (longitud menor a 300 nucleótidos).
+
+¿Cómo estructurar el pipeline combinando awk y sed?
+
+::: {.callout-tip collapse="true"}
+## Clic aquí para ver la respuesta
+```bash
+awk 'NR > 1 && $6 < 300 {print $2}' informacion.tab | sed -E 's/.*_cds_(NP_[0-9]+\.[0-9]+)_.*/\1/' 
+```
+:::
+
+::: {.callout-note}
+## Nota de extracción
+Utilizamos awk para filtrar las líneas que cumplen la condición de longitud y extraemos la columna 2. Luego, mediante sed y expresiones regulares, aislamos el identificador de la proteína (NP_XXXXXX.X) removiendo los caracteres adyacentes del tag.
+:::
+
+# Práctico 3B: Manejo de Textos Avanzado con `awk` y `sed`
+
+## Introducción y Objetivos
+
+En esta guía profundizaremos en el uso de dos de las herramientas más potentes para el procesamiento y filtrado de datos tabulares y secuencias biológicas en la terminal de Linux: **`awk`** y **`sed`**. 
+
+Aprenderás a:
+
+- Extraer métricas de secuencias genómicas mediante la suite EMBOSS (`infoseq`, `cusp`).
+- Filtrar registros según condiciones numéricas sobre columnas específicas.
+- Realizar operaciones matemáticas, formateo numérico (`printf`) y cálculo de estadísticas avanzadas (%GC, promedios) en tuberías de comandos.
+
+---
+
+## Ejercicio 1: Filtrado y Extracción de Secuencias Cortas
+
+### Paso 1: Obtención de métricas de secuencias con EMBOSS
+
+Generaremos un archivo con información sobre las secuencias codificantes utilizando la herramienta `infoseq` del paquete EMBOSS.
+
+```bash
+# Obtener informacion de las secuencias codificantes
+infoseq GCF_000005845.2_ASM584v2_cds_from_genomic.fna > informacion.tab
+
+# Inspeccionar el encabezado de la tabla resultante
+head -n 5 informacion.tab
+
+```
+
+::: {.callout-note}
+
+## Estructura del archivo `informacion.tab`
+
+La **columna 6** de esta salida indica la longitud de la secuencia en nucleótidos.
+:::
+
+---
+
+### Paso 2: Conteo de secuencias menores a 100 aminoácidos
+
+Dado que $1 \text{ aminoácido} = 3 \text{ nucleótidos}$, una secuencia de menos de 100 aminoácidos equivale a tener **menos de 300 nucleótidos**.
+
+```bash
+# Filtrar y contar secuencias con longitud menor a 300 nucleotidos (Columna 6)
+awk '$6 < 300' informacion.tab | wc -l
+
+```
+
+---
+
+### Paso 3: Generación de lista de accesión de proteínas
+
+Extraeremos los códigos de acceso a proteínas para las secuencias que cumplen la condición de longitud.
+
+```bash
+# Ejemplo de pipeline utilizando awk y sed para limpiar el identificador
+awk '$6 < 300 {print $3}' informacion.tab | sed 's/.*protein_id=//' | sed 's/].*//' > lista_proteinas_cortas.txt
+
+# Visualizar las primeras lineas de la lista generada
+head -n 10 lista_proteinas_cortas.txt
+
+```
+
+::: {.callout-tip}
+
+## Recordatorio de `awk` y separador de campos
+
+Por defecto, `awk` utiliza espacios o tabuladores como separador de columnas. Si deseas cambiar el separador a un guión bajo (`_`), utiliza la opción `-F`:
+
+```bash
+awk -F'_' '{print $1}' archivo.tab
+
+```
+
+:::
+
+---
+
+## Ejercicio 2: Procesamiento y Formateo con `awk`
+
+El archivo `Stats_info.tab` (disponible en `MATERIAL/PRACT3B`) contiene información sobre el largo total de secuencia y la cantidad de bases G o C.
+
+### Paso 1: Cálculo de la proporción de GC
+
+Calcularemos la proporción dividiendo el contenido de GC entre el largo total de la secuencia.
+
+```bash
+# Inspeccionar el archivo con nano
+nano Stats_info.tab
+
+# Calcular la proporcion de GC usando operaciones entre columnas
+awk -F "\t" '{print $5/$4}' Stats_info.tab
+
+```
+
+---
+
+### Paso 2: Exclusión de encabezado e impresión de columnas completas
+
+Para evitar procesar la primera fila (encabezado), podemos indicarle a `awk` que comience a evaluar a partir de la segunda fila (`NR > 1`):
+
+```bash
+# Imprimir las columnas originales mas el calculo de proporcion, omitiendo el encabezado
+awk -F "\t" 'NR > 1 {print $0, $5/$4}' Stats_info.tab
+
+```
+
+---
+
+### Paso 3 y 4: Formateo de porcentaje con `printf`
+
+Formatearemos el resultado como un porcentaje con exactamente **2 decimales** y el símbolo `%` al final.
+
+```bash
+# Pipeline con awk y printf
+awk -F "\t" 'NR > 1 {printf "%s\t%.2f%%\n", $0, ($5/$4)*100}' Stats_info.tab
+
+```
+
+* `NR > 1`: Omite la fila 1 (encabezado).
+* `%s`: Imprime la línea completa ($0) en formato de texto.
+* `%.2f%%`: Formatea el resultado numérico con 2 decimales y agrega el carácter literal `%`.
+* `\n`: Agrega el salto de línea al final de cada registro.
+
+---
+
+## Ejercicio 3: Análisis Estadístico
+
+El archivo `GCF_000005845_mediciones.tab` contiene la longitud y el %GC de las secuencias del genoma `GCF_000005845`.
+
+### Paso 1: Cálculo del promedio general de una columna
+
+Estructura básica para calcular un promedio con `awk`:
+
+```bash
+awk '{ sum += $2; n++ } END { print "Promedio:", sum / n }' GCF_000005845_mediciones.tab
+
+```
+
+---
+
+### Paso 2: Adaptación condicional (Filtrado por tamaño)
+
+#### a) Considerar solo secuencias mayores a 1000 bases
+
+```bash
+# Promedio de longitud para secuencias > 1000 bases
+awk '$2 > 1000 { sum += $2; n++ } END { print "Promedio (>1000bp):", sum / n }' GCF_000005845_mediciones.tab
+
+```
+
+#### b) Promedio de %GC para secuencias mayores y menores a 1000 bases
+
+::: {.callout-tip collapse="true"}
+## Clic aquí para ver la respuesta
+
+```bash
+# Promedio de %GC (Columna 3) segun la longitud (Columna 2)
+awk '$2 > 1000 { sum_mayor += $3; n_mayor++ } $2 <= 1000 { sum_menor += $3; n_menor++ } END { print "Promedio %GC (>1000 bp):", sum_mayor / n_mayor; print "Promedio %GC (<=1000 bp):", sum_menor / n_menor }' GCF_000005845_mediciones.tab
+
+```
+:::
+
+---
+
+## Ejercicio 4: Uso de Codones y Frecuencia de Aminoácidos
+
+### Paso 1: Análisis del uso de codones con `cusp`
+
+Generaremos la tabla de frecuencia del uso global de codones mediante EMBOSS `cusp`.
+
+```bash
+# Calcular el uso de codones
+cusp -sequence GCF_000005845.2_ASM584v2_cds_from_genomic.fna -outfile GCF_000005845.2.CodonUsage
+
+# Inspeccionar el archivo generado con less, more o editor de texto
+less GCF_000005845.2.CodonUsage
+
+```
+
+#### Extracción de los 5 codones sinónimos más y menos utilizados
+
+```bash
+# 5 codones MAS utilizados (ordenado por frecuencia/fuerza)
+egrep -v "^#" GCF_000005845.2.CodonUsage | sort -k 3 -n | tail -n 5
+
+# 5 codones MENOS utilizados
+egrep -v "^#" GCF_000005845.2.CodonUsage | sort -k 3 -n | head -n 5
+
+```
+
+---
+
+### Paso 2: Conteo total de aminoácidos Leucina (L) y Fenilalanina (F)
+
+Utilizaremos `egrep -w` para seleccionar coincidencias exactas por palabra del aminoácido deseado y sumaremos la columna de frecuencias con `awk`.
+
+```bash
+# Conteo total para Leucina (L)
+egrep -v "^#" GCF_000005845.2.CodonUsage | egrep -w "L" | awk '{sum += $3} END {print "Total Leucinas (L):", sum}'
+
+# Conteo total para Fenilalanina (F)
+egrep -v "^#" GCF_000005845.2.CodonUsage | egrep -w "F" | awk '{sum += $3} END {print "Total Fenilalaninas (F):", sum}'
+
+```
+
+---
+
+## Preguntas de Reflexión
+
+1. **¿Qué ventaja ofrece procesar archivos tabulares con `awk` frente a abrirlos en una planilla de cálculo como Excel?**
+
+2. **Al calcular promedios en archivos grandes con `awk`, ¿por qué la instrucción `END` es imprescindible?**
+
+
+
