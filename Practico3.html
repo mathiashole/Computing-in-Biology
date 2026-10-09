@@ -3090,18 +3090,20 @@ vertical-align: -.125em;
     <h2 id="toc-title">En este práctico</h2>
    
   <ul>
-  <li><a href="#introducción-y-objetivos" id="toc-introducción-y-objetivos" class="nav-link active" data-scroll-target="#introducción-y-objetivos"><span class="header-section-number">1</span> Introducción y Objetivos</a>
+  <li><a href="#práctico-3-manejo-de-textos-y-bioinformática" id="toc-práctico-3-manejo-de-textos-y-bioinformática" class="nav-link active" data-scroll-target="#práctico-3-manejo-de-textos-y-bioinformática"><span class="header-section-number">1</span> Práctico 3: Manejo de Textos y Bioinformática</a>
   <ul class="collapse">
-  <li><a href="#manejo-de-textos-sed-awk-uniq-grep-sort-y-otros" id="toc-manejo-de-textos-sed-awk-uniq-grep-sort-y-otros" class="nav-link" data-scroll-target="#manejo-de-textos-sed-awk-uniq-grep-sort-y-otros"><span class="header-section-number">1.1</span> “Manejo de textos: sed, awk, uniq, grep, sort y otros”</a></li>
+  <li><a href="#introducción-y-objetivos" id="toc-introducción-y-objetivos" class="nav-link" data-scroll-target="#introducción-y-objetivos"><span class="header-section-number">1.1</span> Introducción y Objetivos</a></li>
+  <li><a href="#ejercicio-1-extracción-de-secuencias-fasta-mediante-edición-de-textos" id="toc-ejercicio-1-extracción-de-secuencias-fasta-mediante-edición-de-textos" class="nav-link" data-scroll-target="#ejercicio-1-extracción-de-secuencias-fasta-mediante-edición-de-textos"><span class="header-section-number">1.2</span> Ejercicio 1: Extracción de Secuencias Fasta Mediante Edición de Textos</a>
+  <ul class="collapse">
+  <li><a href="#ejemplo-de-encabezado-y-secuencia-búsqueda-de-enolase" id="toc-ejemplo-de-encabezado-y-secuencia-búsqueda-de-enolase" class="nav-link" data-scroll-target="#ejemplo-de-encabezado-y-secuencia-búsqueda-de-enolase"><span class="header-section-number">1.2.1</span> Ejemplo de Encabezado y Secuencia (Búsqueda de “enolase”)</a></li>
+  <li><a href="#tareas-a-resolver" id="toc-tareas-a-resolver" class="nav-link" data-scroll-target="#tareas-a-resolver"><span class="header-section-number">1.2.2</span> Tareas a Resolver</a></li>
+  <li><a href="#objetivos-del-práctico" id="toc-objetivos-del-práctico" class="nav-link" data-scroll-target="#objetivos-del-práctico"><span class="header-section-number">1.2.3</span> Objetivos del Práctico</a></li>
   </ul></li>
-  <li><a href="#ejercicio-1-extracción-de-secuencias-utilizando-comandos-de-edición-de-textos" id="toc-ejercicio-1-extracción-de-secuencias-utilizando-comandos-de-edición-de-textos" class="nav-link" data-scroll-target="#ejercicio-1-extracción-de-secuencias-utilizando-comandos-de-edición-de-textos"><span class="header-section-number">2</span> Ejercicio 1: Extracción de secuencias utilizando comandos de edición de textos</a>
+  <li><a href="#requisitos-previos" id="toc-requisitos-previos" class="nav-link" data-scroll-target="#requisitos-previos"><span class="header-section-number">1.3</span> Requisitos Previos</a></li>
+  <li><a href="#parte-1-comandos-básicos-de-gestión-de-archivos" id="toc-parte-1-comandos-básicos-de-gestión-de-archivos" class="nav-link" data-scroll-target="#parte-1-comandos-básicos-de-gestión-de-archivos"><span class="header-section-number">1.4</span> Parte 1: Comandos Básicos de Gestión de Archivos</a>
   <ul class="collapse">
-  <li><a href="#objetivos-del-práctico" id="toc-objetivos-del-práctico" class="nav-link" data-scroll-target="#objetivos-del-práctico"><span class="header-section-number">2.1</span> Objetivos del Práctico</a></li>
+  <li><a href="#creación-de-estructura-de-trabajo" id="toc-creación-de-estructura-de-trabajo" class="nav-link" data-scroll-target="#creación-de-estructura-de-trabajo"><span class="header-section-number">1.4.1</span> Creación de estructura de trabajo</a></li>
   </ul></li>
-  <li><a href="#requisitos-previos" id="toc-requisitos-previos" class="nav-link" data-scroll-target="#requisitos-previos"><span class="header-section-number">3</span> Requisitos Previos</a></li>
-  <li><a href="#parte-1-comandos-básicos-de-gestión-de-archivos" id="toc-parte-1-comandos-básicos-de-gestión-de-archivos" class="nav-link" data-scroll-target="#parte-1-comandos-básicos-de-gestión-de-archivos"><span class="header-section-number">4</span> Parte 1: Comandos Básicos de Gestión de Archivos</a>
-  <ul class="collapse">
-  <li><a href="#creación-de-estructura-de-trabajo" id="toc-creación-de-estructura-de-trabajo" class="nav-link" data-scroll-target="#creación-de-estructura-de-trabajo"><span class="header-section-number">4.1</span> Creación de estructura de trabajo</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -3140,21 +3142,60 @@ vertical-align: -.125em;
 </header>
 
 
-<section id="introducción-y-objetivos" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="introducción-y-objetivos"><span class="header-section-number">1</span> Introducción y Objetivos</h2>
-<section id="manejo-de-textos-sed-awk-uniq-grep-sort-y-otros" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="manejo-de-textos-sed-awk-uniq-grep-sort-y-otros"><span class="header-section-number">1.1</span> “Manejo de textos: sed, awk, uniq, grep, sort y otros”</h3>
-<p>En este práctico nos centraremos en utilizar herramientas para la edición de textos, aunque indirectamente repasaremos muchos de lo aprendido en las clases anteriores. Mediante dos ejercicios distintos, con objetivos similares, aprenderemos las técnicas y estrategias comunes para el procesamiento de textos.</p>
+<section id="práctico-3-manejo-de-textos-y-bioinformática" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Práctico 3: Manejo de Textos y Bioinformática</h1>
+<section id="introducción-y-objetivos" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="introducción-y-objetivos"><span class="header-section-number">1.1</span> Introducción y Objetivos</h2>
+<p>En este práctico nos centraremos en el uso de herramientas de CLI para la edición y procesamiento de textos en Linux (sed, awk, uniq, grep, sort, entre otros). Mediante ejercicios prácticos aplicados a datos biológicos, aprenderás las técnicas y estrategias comunes para la manipulación eficiente de datos no estructurados.</p>
+<hr>
 </section>
-</section>
-<section id="ejercicio-1-extracción-de-secuencias-utilizando-comandos-de-edición-de-textos" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="ejercicio-1-extracción-de-secuencias-utilizando-comandos-de-edición-de-textos"><span class="header-section-number">2</span> Ejercicio 1: Extracción de secuencias utilizando comandos de edición de textos</h2>
-<p>Utilizando comandos básicos del Shell y mediante un string (un conjunto de caracteres, generalmente texto) el estudiante deberá obtener una secuencia codificante determinada. El string se utiliza, en este caso, para buscar en la anotación asignada a cada secuencia codificante en el encabezado de cada una. Vea abajo el string “enolase”, donde coincide en el encabezado:</p>
+<section id="ejercicio-1-extracción-de-secuencias-fasta-mediante-edición-de-textos" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="ejercicio-1-extracción-de-secuencias-fasta-mediante-edición-de-textos"><span class="header-section-number">1.2</span> Ejercicio 1: Extracción de Secuencias Fasta Mediante Edición de Textos</h2>
+<p>En este ejercicio, utilizarás comandos básicos del Shell para extraer una secuencia codificante específica a partir de una cadena de texto (string) dentro del encabezado de una anotación FASTA.</p>
+<section id="ejemplo-de-encabezado-y-secuencia-búsqueda-de-enolase" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="ejemplo-de-encabezado-y-secuencia-búsqueda-de-enolase"><span class="header-section-number">1.2.1</span> Ejemplo de Encabezado y Secuencia (Búsqueda de “enolase”)</h3>
+<p>A continuación se muestra un ejemplo del encabezado objetivo donde coincide el término “enolase”:</p>
 <blockquote class="blockquote">
 <p>lcl|NC_000964.3_cds_NP_389242.1_1382 [gene=mtnW] [locus_tag=BSU13590] [db_xref=GeneID:939339] [protein=2,3-diketo-5-methylthiopentyl-1-phosphate <span style="color: red;">enolase</span>] [protein_id=NP_389242.1] [location=1427034..1428278] ATGGATGAAAATGAAAGGAGCTCTGGCATGAGTGAGTTATTAGCGACATATCTCCTGACCGAACCGGGAGCCGATACAGA GAAGAAAGCAGAACAAATCGCAACAGGATTGACAGTAGGCTCCTGGACTGATCTGCCCCTTGTAAAACAGGAGCAAATGC AAAAGCACAAGGGGCGGGTGATAAAAGTTGAGGAGAGAGAGGGAACTGCTGCATCAGAAAAACAAGCGGTCATCACAATT GCCTATCCTGAAATCAATTTCTCTCAGGATATTCCGGCTTTGCTGACAACAGTGTTTGGCAAGCTGTCCCTGGACGGAAA AATCAAATTAATCGATCTTCACTTCTCTGAAGCATTTAAGCGTGCACTGCCGGGACCGAAGTTTGGCGTATACGGCATCC GGAAGCTGCTGGGAGAGTTTGAGAGACCGCTGTTAATGAGCATATTTAAAGGCGTAATCGGAAGGGACCTGAGTGATATT AAAGAACAGCTCCGGCAGCAGGCGCTTGGCGGAGTTGACTTGATTAAAGACGATGAAATTTTCTTTGAGACTGGTCTAGC GCCTTTTGAAACAAGAATTGCAGAAGGAAAGCAAATATTGAAAGAAACGTATGAACAAACCGGACATAAAACGCTGTATG CGGTGAATTTGACCGGACGTACGGCTGATCTGAAAGACAAAGCGAGACGCGCCGCCGAATTGGGAGCGGATGCGCTTTTG TTTAATGTCTTCGCTTACGGCTTGGACGTTATGCAAGGCCTTGCAGAAGATCCTGAAATCCCAGTTCCGATTATGGCGCA TCCAGCAGTGAGCGGAGCGTTTACGTCTTCTCCGTTTTACGGTTTTTCTCACGCTCTTTTACTCGGAAAATTAAACCGAT ATTGCGGTGCTGACTTCAGCCTCTTTCCGTCTCCATATGGTTCGGTTGCGCTTCCAAGAGCAGATGCACTGGCGATTCAT GAAGAATGTGTGAGAGAGGATGCTTTTAACCAAACATTTGCTGTTCCGTCAGCAGGCATTCATCCCGGCATGGTTCCGCT ATTAATGCGTGATTTCGGCATAGACCACATTATTAACGCCGGAGGAGGCGTACATGGACATCCGAACGGTGCCCAAGGCG GGGGGCGAGCGTTCAGAGCTATTATTGATGCGGTCCTAGAGGCCCAGCCGATTGATGAAAAAGCCGAACAATGCAAGGAT CTTAAGCTTGCGCTAGATAAATGGGGAAAGGCTGAAGCCGTATGA</p>
 </blockquote>
-<section id="objetivos-del-práctico" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="objetivos-del-práctico"><span class="header-section-number">2.1</span> Objetivos del Práctico</h3>
+<hr>
+</section>
+<section id="tareas-a-resolver" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="tareas-a-resolver"><span class="header-section-number">1.2.2</span> Tareas a Resolver</h3>
+<section id="paso-1-obtención-de-datos-crudos-y-análisis-preliminar" class="level4" data-number="1.2.2.1">
+<h4 data-number="1.2.2.1" class="anchored" data-anchor-id="paso-1-obtención-de-datos-crudos-y-análisis-preliminar"><span class="header-section-number">1.2.2.1</span> Paso 1: Obtención de datos crudos y análisis preliminar</h4>
+<ol type="1">
+<li>En la carpeta PRACT3 (ubicada en MATERIALES), encontrarás archivos multifasta que contienen todas las secuencias codificantes de diversos organismos procariotas.</li>
+<li>Preparación del entorno: Copia todos los archivos a tu carpeta personal dentro de un directorio llamado practico3 y trabaja desde allí.</li>
+</ol>
+<p>Comandos: mkdir -p ~/practico3 cd ~/practico3 cp /ruta/a/MATERIALES/PRACT3/*.fna .</p>
+<ol start="3" type="1">
+<li>Procesamiento e inspección: Enumera los archivos e interactúa mediante tuberías (pipes) con otros comandos para generar por consola una tabla estructurada con la siguiente salida:</li>
+</ol>
+<p>GCF_000005845.2 ASM584v2<br> GCF_000007625.1 ASM762v1<br> GCF_000009045.1 ASM904v1<br> GCF_000498355.1 Ade.TY<br> GCF_001484935.1 ASM148493v1<br></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Explicación del comando awk
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El modificador -F’<em>’ establece el guión bajo (</em>) como separador de campos.</p>
+<ul>
+<li>$1 y $2: Forman la primera columna (identificador de ensamblado sin extensión).</li>
+<li>$3: Representa el segundo campo (versión del ensamblaje).</li>
+</ul>
+<p>Comando de ejemplo:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">ls</span> <span class="pp">*</span>.fna <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span><span class="st">&#39;*&#39;</span> <span class="st">&#39;{print $1&quot;*&quot;$2, $3}&#39;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="objetivos-del-práctico" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="objetivos-del-práctico"><span class="header-section-number">1.2.3</span> Objetivos del Práctico</h3>
 <p>Al finalizar esta guía, el alumno será capaz de:</p>
 <ul>
 <li>Navegar y manipular la estructura de archivos en sistemas Linux mediante la CLI.</li>
@@ -3164,8 +3205,8 @@ vertical-align: -.125em;
 </ul>
 </section>
 </section>
-<section id="requisitos-previos" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="requisitos-previos"><span class="header-section-number">3</span> Requisitos Previos</h2>
+<section id="requisitos-previos" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="requisitos-previos"><span class="header-section-number">1.3</span> Requisitos Previos</h2>
 <p>Antes de comenzar con la resolución de los ejercicios, asegúrate de contar con:</p>
 <ol type="1">
 <li>Un entorno Linux activo (Ubuntu, Debian, Fedora, WSL2 en Windows o terminal de macOS).</li>
@@ -3187,23 +3228,24 @@ Nota de Teoría: ¿Qué es Bash?
 </div>
 <hr>
 </section>
-<section id="parte-1-comandos-básicos-de-gestión-de-archivos" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="parte-1-comandos-básicos-de-gestión-de-archivos"><span class="header-section-number">4</span> Parte 1: Comandos Básicos de Gestión de Archivos</h2>
+<section id="parte-1-comandos-básicos-de-gestión-de-archivos" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="parte-1-comandos-básicos-de-gestión-de-archivos"><span class="header-section-number">1.4</span> Parte 1: Comandos Básicos de Gestión de Archivos</h2>
 <p>En esta sección trabajaremos con la manipulación de directorios y archivos.</p>
-<section id="creación-de-estructura-de-trabajo" class="level3" data-number="4.1">
-<h3 data-number="4.1" class="anchored" data-anchor-id="creación-de-estructura-de-trabajo"><span class="header-section-number">4.1</span> Creación de estructura de trabajo</h3>
+<section id="creación-de-estructura-de-trabajo" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="creación-de-estructura-de-trabajo"><span class="header-section-number">1.4.1</span> Creación de estructura de trabajo</h3>
 <p>Ejecuta el siguiente bloque de comandos para preparar tu directorio de trabajo del práctico:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># 1. Crear la estructura de carpetas para el práctico</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/practico_bash/<span class="dt">{datos</span><span class="op">,</span><span class="dt">scripts</span><span class="op">,</span><span class="dt">respaldos}</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># 2. Navegar al directorio de scripts</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="bu">cd</span> ~/practico_bash/scripts</span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co"># 3. Crear un archivo de texto de prueba</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="bu">echo</span> <span class="st">&quot;Lista de servidores activos&quot;</span> <span class="op">&gt;</span> lista.txt</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># 4. Verificar la estructura creada</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">ls</span> <span class="at">-lR</span> ~/practico_bash</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># 1. Crear la estructura de carpetas para el práctico</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/practico_bash/<span class="dt">{datos</span><span class="op">,</span><span class="dt">scripts</span><span class="op">,</span><span class="dt">respaldos}</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># 2. Navegar al directorio de scripts</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="bu">cd</span> ~/practico_bash/scripts</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># 3. Crear un archivo de texto de prueba</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="bu">echo</span> <span class="st">&quot;Lista de servidores activos&quot;</span> <span class="op">&gt;</span> lista.txt</span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co"># 4. Verificar la estructura creada</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="fu">ls</span> <span class="at">-lR</span> ~/practico_bash</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 </section>
 </section>
 
