@@ -3464,7 +3464,36 @@ Explicación del conteo
 <span id="cb4-4"><a href="#cb4-4"></a><span class="co"># 2. Obtener el numero total de bases (A, C, G, T):</span></span>
 <span id="cb4-5"><a href="#cb4-5"></a><span class="fu">egrep</span> <span class="at">-v</span> <span class="st">&quot;&gt;&quot;</span> archivo.fna <span class="kw">|</span> <span class="fu">tr</span> <span class="at">-d</span> <span class="st">&#39;\n&#39;</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-m</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Tabla de resultados de %GC:</p>
-<p>Ensamblado GC% ● GCF_000005845.2 [Calcular: (G+C)/Total * 100] ● GCF_000007625.1 [Calcular: (G+C)/Total * 100] ● GCF_000009045.1 [Calcular: (G+C)/Total * 100] ● GCF_000498355.1 [Calcular: (G+C)/Total * 100] ● GCF_001484935.1 [Calcular: (G+C)/Total * 100]</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ensamblado</th>
+<th style="text-align: left;">% Guanina y Citosina</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>GCF_000005845.2</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>GCF_000007625.1</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>GCF_000009045.1</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>GCF_000498355.1</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>GCF_001484935.1</strong></td>
+<td style="text-align: left;"><input type="text" placeholder="Respuesta..."></td>
+</tr>
+</tbody>
+</table>
 <hr>
 </section>
 </section>
@@ -3647,7 +3676,8 @@ Opciones de <code>makeblastdb</code>
 <h3 data-number="1.3.3" class="anchored" data-anchor-id="paso-3-búsqueda-por-similitud-blastp"><span class="header-section-number">1.3.3</span> Paso 3: Búsqueda por Similitud (BLASTp)</h3>
 <section id="preparación-del-query" class="level4" data-number="1.3.3.1">
 <h4 data-number="1.3.3.1" class="anchored" data-anchor-id="preparación-del-query"><span class="header-section-number">1.3.3.1</span> Preparación del Query</h4>
-<p>Obtenemos la secuencia de referencia en formato FASTA desde NCBI GenBank y la guardamos en <code>SequenciasQuery.fas</code>:</p>
+<p>Obtenemos la secuencia de referencia en formato FASTA desde NCBI GenBank y la guardamos en <code>SequenciasQuery.fas</code></p>
+<p>Para obtener la secuencia de referencia, ingresa a la <a href="https://www.ncbi.nlm.nih.gov/protein/?term=(enolase)+AND+%22Escherichia+coli%22%5Bporgn%3A__txid562%5D">base de datos de proteínas de NCBI (Enolasa en E. coli)</a>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Abrir editor joe (o nano/vim) para guardar la secuencia query</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="ex">joe</span> SequenciasQuery.fas</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
